@@ -1,0 +1,18 @@
+<?php
+
+namespace __NAMESPACE__;
+
+final class Addon
+{
+    const NAME = '__NAME__';
+    const ADDON = '__SHORT_NAME__';
+    const VERSION = '__VERSION__';
+    const DESCRIPTION = '__DESCRIPTION__';
+    const NAMESPACE = '__NAMESPACE__';
+    const AUTHOR = '__AUTHOR__';
+    const AUTHOR_URL = '__AUTHOR_URL__';
+    const HAS_SETTINGS = __HAS_SETTINGS__;
+    const DOCS_URL = '__DOCS_URL__';
+    
+    const EXT_HAS_SETTINGS = '__EXT_HAS_SETTINGS__';
+}

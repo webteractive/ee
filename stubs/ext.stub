@@ -1,0 +1,18 @@
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+use __NAMESPACE__\Service\Helpers\ExtensionSchema;
+
+class __EXT_CLASS__ extends ExtensionSchema
+{
+    public function hooks(): array
+    {
+        return [
+            // $this->makeHook('ee_hook_here', 'theHookHandler', 1)
+        ];
+    }
+
+    public function theHookHandler($data)
+    {
+        exit('Cool');
+    }
+}

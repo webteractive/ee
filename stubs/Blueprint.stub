@@ -1,0 +1,22 @@
+<?php
+
+namespace __NAMESPACE__\Service\Helpers;
+
+class Blueprint
+{
+    public function newTable($name, $ifNotExists)
+    {
+        return new CreateNewTable($name, $ifNotExists);
+    }
+
+    public function dropTable($table)
+    {
+        ee()->load->dbforge();
+        ee()->dbforge->drop_table($table);
+    }
+
+    public function useTable($name)
+    {
+        return new UpdateTable($name);
+    }
+}

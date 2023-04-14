@@ -1,0 +1,22 @@
+{
+    "name": "webteractive/ee",
+    "description": "Highly opinionated ExpressionEngine add-on boilerplate generator.",
+    "require": {
+        "symfony/console": "^6.2",
+        "illuminate/support": "^10.7",
+        "league/flysystem": "^3.14"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Webteractive\\EE\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Glen Bangkila",
+            "email": "hadeinvane@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}

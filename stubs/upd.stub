@@ -1,0 +1,28 @@
+<?php  if (! defined('BASEPATH')) exit('No direct script access allowed');
+
+use __NAMESPACE__\Service\Helpers\Blueprint;
+use __NAMESPACE__\Service\Helpers\ModuleSchema;
+
+class __UPD_CLASS__ extends ModuleSchema
+{
+    public function onInstall(Blueprint $schema)
+    {
+        // $schema->newTable('__SHORT_NAME__', true)
+        //     ->withId()
+        //     ->withString('name')
+        //     ->withLongText('settings')
+        //     ->withSiteId()
+        //     ->withDates()
+        //     ->create();
+    }
+
+    public function onUninstall(Blueprint $schema)
+    {
+        // $schema->dropTable('__SHORT_NAME__');
+    }
+
+    public function actions()
+    {
+        return [];
+    }
+}

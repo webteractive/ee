@@ -1,0 +1,68 @@
+<?php
+
+namespace __NAMESPACE__\Service\Helpers;
+
+use __NAMESPACE__\Addon;
+
+abstract class ExtensionSchema
+{
+    public $name = Addon::NAME;
+    public $version = Addon::VERSION;
+    public $description = Addon::DESCRIPTION;
+    public $settings_exist = Addon::EXT_HAS_SETTINGS;
+    public $docs_url = Addon::DOCS_URL;
+
+    public $settings = [];
+
+    public function __construct($settings = '')
+    {
+        $this->settings = $settings;
+    }
+
+    public abstract function hooks(): array;
+
+    public function makeHook($hook, $method, $priority = 10, $enabled = 'y')
+    {
+        return [
+            'class' => get_called_class(),
+            'method' => $method,
+            'hook' => $hook,
+            'settings' => serialize($this->settings),
+            'priority' => $priority,
+            'enabled' => $enabled,
+            'version' => $this->version,
+        ];
+    }
+
+    public function activate_extension()
+    {
+        if (count($this->hooks()) > 0) {
+            foreach ($this->hooks() as $hook) {
+                ee()->db->insert('extensions', $hook);
+            }
+        }
+    }
+
+    public function update_extension($current = '')
+    {
+        if ($current == '' or $current == $this->version) {
+            return FALSE;
+        }
+
+        if ($current < $this->version) {
+            // Update to version 1.0
+        }
+
+        ee()->db->where('class', get_called_class());
+        ee()->db->update(
+            'extensions',
+            ['version' => $this->version]
+        );
+    }
+
+    public function disable_extension()
+    {
+        ee()->db->where('class', get_called_class());
+        ee()->db->delete('extensions');
+    }
+}

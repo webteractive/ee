@@ -1,0 +1,50 @@
+<?php
+
+namespace __NAMESPACE__\Service\Helpers;
+
+class CreateNewTable
+{
+    use WithTableFields;
+
+    protected $table;
+    protected $key;
+    protected $ifNotExists;
+
+    public function __construct($table, $ifNotExists)
+    {
+        $this->table = $table;
+        $this->ifNotExists = $ifNotExists;
+    }
+
+    public function withId($key = 'id')
+    {
+        $this->key = $key;
+        return $this->withInteger($key, 20, [
+            'auto_increment' => true
+        ]);
+    }
+
+    public function withDates()
+    {
+        return $this->withDate('created_at')
+            ->withDate('updated_at');
+    }
+
+    public function withSiteId()
+    {
+        return $this->withInteger('site_id', 4, [
+            'null' => true,
+            'default' => 1
+        ]);
+    }
+
+    public function create()
+    {
+        ee()->load->dbforge();
+        ee()->dbforge->add_field($this->fields);
+        if ($this->key) {
+            ee()->dbforge->add_key($this->key, true);
+        }
+        ee()->dbforge->create_table($this->table, $this->ifNotExists);
+    }
+}

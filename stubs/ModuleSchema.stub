@@ -1,0 +1,97 @@
+<?php
+
+namespace __NAMESPACE__\Service\Helpers;
+
+use __NAMESPACE__\Addon;
+
+abstract class ModuleSchema
+{
+    public function install()
+    {
+        ee()->db->insert('modules', [
+            'has_cp_backend' => $this->toYesOrNo($this->hasControlPanelBackend()),
+            'has_publish_fields' => $this->toYesOrNo($this->hasPublishFields()),
+            'module_name' => Addon::ADDON,
+            'module_version' => Addon::VERSION,
+        ]);
+
+        $this->installActions();
+        $this->onInstall(new Blueprint);
+
+        return true;
+    }
+
+    abstract public function onInstall(Blueprint $table);
+    abstract public function onUninstall(Blueprint $table);
+
+    public function onUpdate($current, Blueprint $table)
+    {
+    }
+
+    public function hasControlPanelBackend(): bool
+    {
+        return true;
+    }
+
+    public function hasPublishFields(): bool
+    {
+        return false;
+    }
+
+    public function update($current = '')
+    {
+        if (version_compare($current, Addon::VERSION, '=')) {
+            return false;
+        }
+
+        $this->onUpdate($current, new Blueprint);
+
+        return true;
+    }
+
+    public function uninstall()
+    {
+        ee()->db->select('module_id');
+        $query = ee()->db->get_where('modules', ['module_name' => Addon::ADDON]);
+        ee()->db->where('module_id', $query->row('module_id'));
+        ee()->db->delete('module_member_groups');
+        ee()->db->where('module_name', Addon::ADDON);
+        ee()->db->delete('modules');
+
+        $this->unintallActions();
+        $this->onUninstall(new Blueprint);
+
+        return true;
+    }
+
+    public function actions()
+    {
+        return [];
+    }
+
+    private function installActions()
+    {
+        foreach ($this->actions() as $method) {
+            $query = ee()->db->get_where('actions', ['class' => Addon::ADDON, 'method' => $method]);
+            if ($query->num_rows() === 0) {
+                ee()->db->insert('actions', [
+                    'class'  => Addon::ADDON,
+                    'method' => $method
+                ]);
+            }
+        }
+    }
+
+    private function unintallActions()
+    {
+        if (empty($this->actions()) === false) {
+            ee()->db->where_in('class', [Addon::ADDON]);
+            ee()->db->delete('actions');
+        }
+    }
+
+    private function toYesOrNo($yesOrNo)
+    {
+        return $yesOrNo ? 'y' : 'n';
+    }
+}

@@ -1,0 +1,71 @@
+<?php
+
+namespace EETech\MFA\Framework\Migration;
+
+trait WithTableFields
+{
+    protected $fields;
+
+    public function withInteger($key, $size, $options = [])
+    {
+        $this->fields[$key] = array_merge([
+            'type' => 'INT',
+            'constraint' => $size,
+            'unsigned' => true,
+        ], $options);
+
+        return $this;
+    }
+
+    public function withBigInteger($key, $size, $options = [])
+    {
+        $this->fields[$key] = array_merge([
+            'type' => 'BIGINT',
+            'constraint' => $size,
+            'unsigned' => true,
+        ], $options);
+
+        return $this;
+    }
+
+    public function withString($key, $nullable = false, $size = 255)
+    {
+        $this->fields[$key] = [
+            'type' => 'VARCHAR',
+            'constraint' => $size,
+            'null' => $nullable
+        ];
+
+        return $this;
+    }
+
+    public function withText($key, $nullable = false)
+    {
+        $this->fields[$key] = [
+            'type' => 'TEXT',
+            'null' => $nullable,
+        ];
+
+        return $this;
+    }
+
+    public function withLongText($key, $nullable = false)
+    {
+        $this->fields[$key] = [
+            'type' => 'LONGTEXT',
+            'null' => $nullable,
+        ];
+
+        return $this;
+    }
+
+    public function withDate($key)
+    {
+        $this->withInteger($key, 20, [
+            'default' => 0,
+            'null' => true
+        ]);
+
+        return $this;
+    }
+}

@@ -1,0 +1,16 @@
+<?php if (! defined('BASEPATH')) exit('No direct script access allowed');
+
+require_once __DIR__ . '/Addon.php';
+
+use __NAMESPACE__\Addon;
+
+return [
+    'name' => Addon::NAME,
+    'version' => Addon::VERSION,
+    'namespace' => Addon::NAMESPACE,
+    'description' => Addon::DESCRIPTION,
+    'author' => Addon::AUTHOR,
+    'author_url' => Addon::AUTHOR_URL,
+    'settings_exist' => Addon::HAS_SETTINGS,
+    'services' => []
+];

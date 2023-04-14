@@ -1,0 +1,22 @@
+<?php
+
+namespace __NAMESPACE__\Service\Helpers;
+
+
+class UpdateTable
+{
+    use WithTableFields;
+
+    protected $table;
+
+    public function __construct($table)
+    {
+        $this->table = $table;
+    }
+
+    public function save()
+    {
+        ee()->load->dbforge();
+        ee()->dbforge->add_column($this->table, $this->fields);
+    }
+}

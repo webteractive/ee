@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+
+use Webteractive\EE\GenerateCommand;
+use Webteractive\EE\MakeServiceCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+
+$application->add(new GenerateCommand);
+$application->add(new MakeServiceCommand);
+
+$application->run();
