@@ -1,7 +1,7 @@
 <?php  if (! defined('BASEPATH')) exit('No direct script access allowed');
 
-use __NAMESPACE__\Service\Helpers\Blueprint;
-use __NAMESPACE__\Service\Helpers\ModuleSchema;
+use __NAMESPACE__\Service\Helpers\Migrations\Blueprint;
+use __NAMESPACE__\Service\Helpers\Migrations\ModuleSchema;
 
 class __UPD_CLASS__ extends ModuleSchema
 {

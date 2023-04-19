@@ -86,4 +86,16 @@ abstract class Command extends BaseCommand
             new LocalFilesystemAdapter(__DIR__ . '/../')
         );
     }
+
+    public function stubs()
+    {
+        return new Filesystem(
+            new LocalFilesystemAdapter(__DIR__ . '/../stubs/')
+        );
+    }
+
+    public function makeStorage($name)
+    {
+        return new Storage($name);
+    }
 }

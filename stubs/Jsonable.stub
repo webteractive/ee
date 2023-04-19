@@ -1,0 +1,30 @@
+<?php
+
+namespace __NAMESPACE__\Service;
+
+trait Jsonable
+{
+    protected function toJson($data = [], $status = 200)
+    {
+        $statusText = $status == 422
+            ? 'Unprocessable Entity'
+            : '';
+        ee()->output->set_header('Content-Type: application/json');
+        ee()->output->set_status_header($status, $statusText);
+        return ee()->output->send_ajax_response($data);
+    }
+
+    public function toSuccessfulJson($data = [])
+    {
+        return $this->toJson(array_merge([
+            'success' => true
+        ], $data));
+    }
+
+    public function toFailedJson($data = [])
+    {
+        return $this->toJson(array_merge([
+            'success' => false
+        ], $data), 422);
+    }
+}

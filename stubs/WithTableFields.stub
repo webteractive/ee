@@ -1,6 +1,6 @@
 <?php
 
-namespace EETech\MFA\Framework\Migration;
+namespace __NAMESPACE__\Service\Helpers\Migrations;
 
 trait WithTableFields
 {

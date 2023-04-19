@@ -1,0 +1,13 @@
+<?php
+
+namespace __NAMESPACE__\Service;
+
+class View
+{
+    public static function render($path, $data = [], $namespace = '__SHORT_NAME__')
+    {
+        return ee('View')
+            ->make("{$namespace}:{$path}")
+            ->render($data);
+    }
+}

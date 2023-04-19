@@ -1,1 +1,9 @@
-/vendor/
+*
+!/src/
+!/src/*
+!/stubs/
+!/stubs/*
+!composer.json
+!ee
+!LICENSE
+!README.md

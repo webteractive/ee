@@ -1,0 +1,6 @@
+<?php
+
+return [
+    '__SHORT_NAME__' => \__NAMESPACE__\Addon::NAME
+    // Add more language keys
+];

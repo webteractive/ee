@@ -18,5 +18,8 @@
             "email": "hadeinvane@gmail.com"
         }
     ],
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "require-dev": {
+        "symfony/var-dumper": "^6.2"
+    }
 }

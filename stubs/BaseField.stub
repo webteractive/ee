@@ -1,0 +1,85 @@
+<?php
+
+namespace __NAMESPACE__\Service\Fields;
+
+use __NAMESPACE__\Service\Debug;
+
+abstract class BaseField
+{
+    protected $name;
+    protected $label;
+    protected $value;
+    protected $description;
+    protected $required = false;
+
+    public function __construct($name, $label, $value = null)
+    {
+        $this->name = $name;
+        $this->label = $label;
+        $this->value($value);
+    }
+
+    public static function make($name, $label, $value = null)
+    {
+        return new static($name, $label, $value);
+    }
+
+    abstract public function type(): string;
+
+    public function isRequired()
+    {
+        $this->required = true;
+        return $this;
+    }
+
+    public function value($value)
+    {
+        $this->value = is_callable($value)
+            ? $value()
+            : $value;
+        return $this;
+    }
+
+    public function isHtml()
+    {
+        return $this->type() == 'html';
+    }
+
+    public function attr()
+    {
+        return [];
+    }
+
+    public function description($description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function get()
+    {
+        $field = [
+            'type' =>  $this->type(),
+            $this->isHtml() ? 'content' : 'value' => $this->value,
+        ];
+
+        if ($this->required) {
+            $field['required'] = true;
+        }
+
+        $fieldset = [
+            'title' => $this->label,
+            'desc' => $this->description,
+            'fields' => [$this->name => $field],
+            'attr' => $this->attr()
+        ];
+
+        if ($desc = $this->description) {
+            $fieldset['desc'] = $desc;
+        }
+
+        // Debug::dump($fieldset);
+
+        return $fieldset;
+    }
+}

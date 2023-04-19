@@ -1,0 +1,16 @@
+<?php
+
+namespace __NAMESPACE__\Service;
+
+class Date
+{
+    public static function localizeFormat($timestamp)
+    {
+        return static::format(ee()->localize->get_date_format(), $timestamp);
+    }
+
+    public static function format($format, $timestamp)
+    {
+        return ee()->localize->format_date($format, $timestamp);
+    }
+}

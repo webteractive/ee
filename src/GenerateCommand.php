@@ -15,6 +15,7 @@ class GenerateCommand extends Command
         return [
             new InputOption('plugin-only', 'p', null, 'Generate plugin only boilerplate'),
             new InputOption('extension-only', 'e', null, 'Generate extension only boilerplate'),
+            new InputOption('overwrite', 'o', null, 'Overwrite existing boilerplate'),
         ];
     }
 
@@ -23,12 +24,21 @@ class GenerateCommand extends Command
             'addon.setup',
             'Addon',
             'upd',
-            'Blueprint',
-            'CreateNewTable',
-            'ExtensionSchema',
-            'ModuleSchema',
-            'UpdateTable',
-            'WithTableFields'
+            'Service/Helpers/Migrations/Blueprint',
+            'Service/Helpers/Migrations/CreateNewTable',
+            'Service/Helpers/Migrations/ExtensionSchema',
+            'Service/Helpers/Migrations/ModuleSchema',
+            'Service/Helpers/Migrations/UpdateTable',
+            'Service/Helpers/Migrations/WithTableFields',
+            'Service/Helpers/Fields/Date',
+            'Service/Helpers/Fields/BaseField',
+            'Service/Helpers/Fields/Hidden',
+            'Service/Helpers/Fields/Html',
+            'Service/Helpers/Fields/Text',
+            'Service/Helpers/Fields/Textarea',
+            'Service/Helpers/View',
+            'Service/Helpers/Jsonable',
+            'language/english/lang',
         ],
         'module' => [
             'mod',
@@ -40,28 +50,30 @@ class GenerateCommand extends Command
     {
         $name = $this->ask('Please enter the add-on name');
         $shortName = $this->ask('Please enter the add-on short name', Str::of($name)->replace('-', ' ')->snake());
-        // $description = $this->ask('Please enter the add-on description');
-        // $namespace = $this->ask('Please enter the add-on namespace');
-        $cwd = getcwd();
+        $description = $this->ask('Please enter the add-on description', '');
+        $namespace = $this->ask('Please enter the add-on namespace', 'Acme\\'.Str::of($name)->replace('-', ' ')->camel()->ucfirst());
+        $author = $this->ask('Please enter the add-on author', get_current_user());
+        $authorUrl = $this->ask('Please enter the add-on author URL', '#');
+        $docsUrl = $this->ask('Please enter the add-on documentation URL', '#');
+
+        $storage = $this->makeStorage($shortName);
 
         $generating = 'module';
 
         // Create the folder
-        $className = Str::of($name)->ucfirst()->snake()->toString();
+        $className = Str::of($shortName)->snake()->ucfirst()->toString();
 
         $values = collect([
             'name' => $name,
             'short_name' => $shortName,
             'version' => '1.0.0',
-            // 'description' => $description,
-            // 'namespace' => $namespace,
-            'description' => 'Cool add-on bro',
-            'namespace' => 'EETech\Ekko',
+            'description' => $description,
+            'namespace' => $namespace,
             'has_settings' => 'true',
             'ext_has_settings' => 'y',
-            'author' => 'Author',
-            'author_url' => 'https://example.com',
-            'docs_url' => 'https://example.com',
+            'author' => $author,
+            'author_url' => $authorUrl,
+            'docs_url' => $docsUrl,
             'upd_class' => $className . '_upd',
             'mod_class' => $className,
             'pi_class' => $className,
@@ -76,61 +88,54 @@ class GenerateCommand extends Command
         //     return Command::FAILURE;
         // }
 
-        $this->cwd()->createDirectory($shortName);
+        $storage->cwd()->createDirectory($shortName);
 
         if (($files = $this->fileMap[$generating]) ?? false) {
-            $this->writeAddonFiles($shortName, $this->fileMap['common'], $values);
-            $this->writeAddonFiles($shortName, $files, $values);
+            $this->writeAddonFiles($storage, $shortName, $this->fileMap['common'], $values);
+            $this->writeAddonFiles($storage, $shortName, $files, $values);
         }
 
-        
-        
-
-        $this->line($name);
-        $this->line(getcwd());
+        $this->info("The <comment>{$name}</comment> add-on boilerplate has been generated and is located in <comment>{$storage->getAddonPath()}</comment>");
 
         return Command::SUCCESS;
     }
 
-    public function writeAddonFiles($shortName, $files = [], $values = [])
+    public function writeAddonFiles(Storage $storage, $shortName, $files = [], $values = [])
     {
-        $addonFiles = [
-            'mod',
-            'ext',
-            'pi',
-            'upd',
-            'mcp'
-        ];
-        $helperFiles = [
-            'Blueprint',
-            'CreateNewTable',
-            'ExtensionSchema',
-            'ModuleSchema',
-            'UpdateTable',
-            'WithTableFields'
-        ];
-        foreach ($files as $key => $file) {
-            $filename = in_array($file, $addonFiles)
-                ? $file . '.' . $shortName
-                : $file;
+        collect($files)
+            ->each(function($items) use ($storage, $shortName, $values) {
+                collect($items)->each(function($item) use ($storage, $shortName, $values) {
+                    $addonClassFiles = [
+                        'mod',
+                        'ext',
+                        'pi',
+                        'upd',
+                        'mcp'
+                    ];
 
-            $filename = in_array($filename, $helperFiles)
-                ? 'Service/Helpers/' . $filename
-                : $filename;
+                    $target = in_array($item, $addonClassFiles)
+                        ? $item . '.' . $shortName
+                        : $item;
 
-            $this->addon($shortName)
-                ->write(
-                    "{$filename}.php",
-                    $this->readAndReplace("stubs/{$file}.stub", $values)
-                );
-        }
+                    if ($item == 'language/english/lang') {
+                        $target = "language/english/{$shortName}_lang";
+                    }
+
+                    $source = class_basename($item) . '.stub';
+
+                    $storage->addon()->write(
+                        $target . '.php',
+                        $this->readAndReplace($storage, $source, $values)
+                    );
+                });
+            });
 
         return $this;
     }
 
-    public function readAndReplace($location, $values = [])
+    public function readAndReplace($storage, $location, $values = [])
     {
-        $contents = $this->resources()->read($location);
+        $contents = $storage->stubs()->read($location);
 
         foreach ($values as $key => $value) {
             $contents = Str::replace($key, $value, $contents);

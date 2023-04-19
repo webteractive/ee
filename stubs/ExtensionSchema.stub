@@ -1,6 +1,6 @@
 <?php
 
-namespace __NAMESPACE__\Service\Helpers;
+namespace __NAMESPACE__\Service\Helpers\Migrations;
 
 use __NAMESPACE__\Addon;
 

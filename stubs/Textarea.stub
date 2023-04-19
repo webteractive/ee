@@ -1,0 +1,11 @@
+<?php
+
+namespace __NAMESPACE__\Service\Fields;
+
+class Textarea extends BaseField
+{
+    public function type(): string
+    {
+        return 'textarea';
+    }
+}

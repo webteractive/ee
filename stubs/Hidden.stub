@@ -1,0 +1,18 @@
+<?php
+
+namespace __NAMESPACE__\Service\Fields;
+
+class Hidden extends BaseField
+{
+    public function type(): string
+    {
+        return 'hidden';
+    }
+
+    public function attr()
+    {
+        return [
+            'class' => 'hidden'
+        ];
+    }
+}
