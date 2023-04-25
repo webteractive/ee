@@ -1,2 +1,1 @@
-# ee
-Highly opinionated ExpressionEngine add-on boilerplate generator.
+# Highly opinionated ExpressionEngine add-on boilerplate generator but not ready yet.
