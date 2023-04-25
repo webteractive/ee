@@ -2,9 +2,9 @@
     "name": "webteractive/ee",
     "description": "Highly opinionated ExpressionEngine add-on boilerplate generator.",
     "require": {
-        "symfony/console": "^6.2",
+        "symfony/console": "^6.0",
         "illuminate/support": "^10.0",
-        "league/flysystem": "^3.14"
+        "league/flysystem": "^3.0"
     },
     "license": "MIT",
     "autoload": {
@@ -20,6 +20,6 @@
     ],
     "minimum-stability": "stable",
     "require-dev": {
-        "symfony/var-dumper": "^6.2"
+        "symfony/var-dumper": "^6.0"
     }
 }
