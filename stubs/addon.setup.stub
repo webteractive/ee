@@ -2,15 +2,13 @@
 
 require_once __DIR__ . '/Addon.php';
 
-use __NAMESPACE__\Addon;
-
 return [
-    'name' => Addon::NAME,
-    'version' => Addon::VERSION,
-    'namespace' => Addon::NAMESPACE,
-    'description' => Addon::DESCRIPTION,
-    'author' => Addon::AUTHOR,
-    'author_url' => Addon::AUTHOR_URL,
-    'settings_exist' => Addon::HAS_SETTINGS,
+    'name' => \__NAMESPACE__\Addon::NAME,
+    'version' => \__NAMESPACE__\Addon::VERSION,
+    'namespace' => \__NAMESPACE__\Addon::NAMESPACE,
+    'description' => \__NAMESPACE__\Addon::DESCRIPTION,
+    'author' => \__NAMESPACE__\Addon::AUTHOR,
+    'author_url' => \__NAMESPACE__\Addon::AUTHOR_URL,
+    'settings_exist' => \__NAMESPACE__\Addon::HAS_SETTINGS,
     'services' => []
 ];

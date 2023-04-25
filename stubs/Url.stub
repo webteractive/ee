@@ -1,0 +1,17 @@
+<?php
+
+namespace __NAMESPACE__\Service\Helpers;
+
+use __NAMESPACE__\Addon;
+
+class Url
+{
+    public static function make($path, $compiled = false)
+    {
+        $url = ee('CP/URL', join('/', [Addon::BASE_URL_PATH, $path]));
+        
+        return $compiled
+            ? $url->compile()
+            : $url;
+    }
+}

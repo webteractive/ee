@@ -42,9 +42,9 @@ abstract class Command extends BaseCommand
         return $this->handle();
     }
 
-    public function ask(string $question, $default = null)
+    public function ask(string $question, $default = null, $intensity = 'info')
     {
-        $final = Str::of("<info>{$question}</info>")
+        $final = Str::of("<{$intensity}>{$question}</{$intensity}>")
             ->when($default, function($str, $default) {
                 return $str->append(": [<comment>{$default}</comment>] ");
             }, fn ($str) => $str->append(': '));
@@ -64,6 +64,16 @@ abstract class Command extends BaseCommand
     public function info($string, $options = 0)
     {
         return $this->line("<info>{$string}</info>", $options);
+    }
+
+    public function error($string, $options = 0)
+    {
+        return $this->line("<error>{$string}</error>", $options);
+    }
+
+    public function warn($string, $options = 0)
+    {
+        return $this->line("<comment>{$string}</comment>", $options);
     }
 
     public function cwd()

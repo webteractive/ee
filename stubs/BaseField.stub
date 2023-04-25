@@ -1,6 +1,6 @@
 <?php
 
-namespace __NAMESPACE__\Service\Fields;
+namespace __NAMESPACE__\Service\Helpers\Fields;
 
 use __NAMESPACE__\Service\Debug;
 

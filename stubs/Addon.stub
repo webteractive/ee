@@ -15,4 +15,8 @@ final class Addon
     const DOCS_URL = '__DOCS_URL__';
     
     const EXT_HAS_SETTINGS = '__EXT_HAS_SETTINGS__';
+
+
+    const BASE_URL_PATH = 'addons/settings/__SHORT_NAME__';
+
 }

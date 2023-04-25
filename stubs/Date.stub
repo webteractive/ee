@@ -1,6 +1,6 @@
 <?php
 
-namespace __NAMESPACE__\Service;
+namespace __NAMESPACE__\Service\Helpers\Fields;
 
 class Date
 {

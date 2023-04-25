@@ -1,6 +1,6 @@
 <?php
 
-namespace __NAMESPACE__\Service;
+namespace __NAMESPACE__\Service\Helpers;
 
 class View
 {
@@ -9,5 +9,27 @@ class View
         return ee('View')
             ->make("{$namespace}:{$path}")
             ->render($data);
+    }
+
+    public static function form($baseUrl, $title, $fields, $options = [])
+    {
+        $body = static::render('_shared/form', array_merge([
+            'sections' => $fields,
+            'base_url' => $baseUrl,
+            'cp_page_title' => $title,
+            'save_btn_text' => 'btn_save_settings',
+            'save_btn_text_working' => 'btn_saving',
+        ], $options), 'ee');
+
+        return static::page($title, $body, []);
+    }
+
+    public static function page($body, $title, $breadcrumb = [])
+    {
+        return [
+            'heading' => $title,
+			'breadcrumb' => $breadcrumb,
+            'body' => $body
+        ];
     }
 }
