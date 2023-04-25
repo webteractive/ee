@@ -12,11 +12,11 @@ class Storage
     protected $addonPath;
     protected $stubsPath;
 
-    public function __construct($name)
+    public function __construct($name, $cwd = null)
     {
         $this->name = $name;
-        $this->cwdPath = getcwd();
-        $this->addonPath = getcwd() . '/' . $name;
+        $this->cwdPath = $cwd ?? getcwd();
+        $this->addonPath = ($cwd ?? getcwd()) . '/' . $name;
         $this->stubsPath = __DIR__ . '/../stubs/';
     }
 

@@ -3,7 +3,7 @@
 namespace Webteractive\EE;
 
 use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class AddonFiles
 {
@@ -11,6 +11,13 @@ class AddonFiles
     const TYPE_PLUGIN = 'plugin';
     const TYPE_EXTENSION = 'extension';
 
+    protected $type;
+    protected $name;
+    protected $values;
+    protected $storage;
+
+
+    protected $prefixes = ['mod', 'ext', 'pi', 'upd', 'mcp'];
     protected $files = [
         'required' => [
             'addon.setup',
@@ -44,10 +51,6 @@ class AddonFiles
 
         ]
     ];
-    protected $type;
-    protected $name;
-    protected $values;
-    protected $storage;
 
     public function __construct($type, $name, $values = [])
     {
@@ -79,24 +82,24 @@ class AddonFiles
 
     public function files()
     {
-        return collect($this->files);
+        return Collection::make($this->files);
     }
 
     public function write()
     {
-        collect($this->files)
+        Collection::make($this->files)
             ->filter(function($items, $key) {
                 return in_array($key, [
                     static::TYPE_MODULE => ['required', 'migrations', 'fields', 'helpers', 'languages', static::TYPE_MODULE],
+                    static::TYPE_EXTENSION => ['required', 'migrations', 'fields', 'helpers', 'languages', static::TYPE_EXTENSION],
                     static::TYPE_PLUGIN => ['required', 'helpers', 'languages', static::TYPE_PLUGIN],
-                    static::TYPE_EXTENSION => ['required', 'helpers', 'languages', static::TYPE_EXTENSION],
                 ][$this->type]);
             })
             ->values()
             ->flatten()
             ->each(function($item) {
                 // Handle add-on prefixed files
-                $target = in_array($item, ['mod', 'ext', 'pi', 'upd', 'mcp'])
+                $target = in_array($item, $this->prefixes)
                     ? $item . '.' . $this->name
                     : $item;
                 // Handle language files

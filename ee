@@ -7,13 +7,7 @@ if (file_exists($autoload = __DIR__ . '/vendor/autoload.php')) {
     require dirname(__DIR__, 2) . '/autoload.php';
 }
 
-use Webteractive\EE\GenerateCommand;
-use Webteractive\EE\MakeServiceCommand;
-use Symfony\Component\Console\Application;
-
-$application = new Application();
-
-$application->add(new GenerateCommand);
-$application->add(new MakeServiceCommand);
-
+$application = new \Symfony\Component\Console\Application();
+$application->add(new \Webteractive\EE\GenerateCommand);
+$application->add(new \Webteractive\EE\MakeServiceCommand);
 $application->run();

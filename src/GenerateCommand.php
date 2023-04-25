@@ -57,8 +57,11 @@ class GenerateCommand extends Command
             return Command::FAILURE;
         }
 
+        // Check if cwd has is in ee root - find system
+
         if ($name = $this->ask('Please enter the add-on name')) {
             $shortName = $this->ask('Please enter the add-on short name', Str::of($name)->replace('-', ' ')->snake());
+
             if ($this->cwd()->directoryExists($shortName)) {
                 if ($this->input->getOption('overwrite') === null) {
                     $this->warn("The <error> {$shortName} </error> add-on already exists.");
