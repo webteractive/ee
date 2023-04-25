@@ -1,7 +1,11 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__.'/vendor/autoload.php';
+if (file_exists($autoload = __DIR__ . '/vendor/autoload.php')) {
+    require $autoload;
+} else {
+    require dirname(__DIR__, 2) . '/autoload.php';
+}
 
 use Webteractive\EE\GenerateCommand;
 use Webteractive\EE\MakeServiceCommand;
